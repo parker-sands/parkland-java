@@ -1,0 +1,87 @@
+/*
+Create a class Hex which takes a number as an argument.
+
+Adding a hex object to a number (by using valueOf) generates a number, but calling toString or toJSON will show its hexadecimal value starting with "0x". To make hex objects comparable you have to provide a method equals.
+
+Example:
+
+Hex FF = new Hex(255);
+FF.toString() == "0xFF"
+FF.valueOf() + 1 == 256
+FF.equals(new Hex(255)) == true
+Also create two methods, plus and minus which will add or subtract a number or Hex object and return a new Hex object.
+
+Hex a = new Hex(10);
+Hex b = new Hex(5);
+a.plus(b).toJSON() == "0xF";
+a.plus(2).toJSON() == "0xC";
+Also, create a parse class method that can parse Hexadecimal numbers and convert them to standard decimal numbers:
+
+Hex.parse("0xFF") == 255
+Hex.parse("FF") == 255
+Note: If you define both valueOf and toString, "Hex value:" + new Hex(255) may not behave as expected!
+*/
+
+public class Hex{
+  // The underlying value stored as an int.
+  private final int value;
+  
+  // Constructor: creates a Hex from an integer value.
+  public Hex(int value){
+    this.value = value;
+  }
+  
+  // Returns the integer value represented by this Hex.
+  public int valueOf(){
+    return value;
+  }
+  
+  // Returns the JSON representation of this Hex.
+  // (For this exercise, I will assume it is the same as toString().)
+  public String toJSON(){
+    return toString();
+   }
+  
+  // Returns the hexadecimal string representation (in uppercase) with a "0x" prefix.
+  public String toString(){
+    return "0x" + Integer.toHexString(value).toUpperCase();
+  }
+  
+  // Returns a new Hex whose value is the sum of this Hex and the other Hex.
+  public Hex plus(Hex other){
+    return new Hex(this.value + other.value);
+  }
+  
+  // Returns a new Hex whose value is the difference between this Hex and the other Hex.
+  public Hex minus(Hex other){
+    return new Hex(this.value - other.value);
+  }
+  
+  // Returns a new Hex whose value is the sum of this Hex and the given integer.
+  public Hex plus(int number){
+    return new Hex(this.value + number);
+  }
+  
+  // Returns a new Hex whose value is the difference between this Hex and the given integer.
+  public Hex minus(int number ){
+    return new Hex(this.value - number);
+  }
+  
+  // Static method: parses a hexadecimal string and returns the corresponding integer value.
+  public static int parse(String string){
+    // Remove optional "0x" or "0X" prefix.
+    if (string.startsWith("0x") || string.startsWith("0X")) {
+      string = string.substring(2);
+    }
+    return Integer.parseInt(string, 16);
+  }
+  
+  // Overrides equals to compare Hex objects based on their underlying value.
+  @Override
+  public boolean equals(Object other){
+    if (this == other) return true;
+    if (!(other instanceof Hex)) return false;
+    Hex h = (Hex) other;
+    return this.value == h.value;
+  }
+}
